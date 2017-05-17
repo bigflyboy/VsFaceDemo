@@ -65,6 +65,7 @@ public class ViewControl{
 
     //切换前后摄像头
     public void switchCamera(){
+        gpu.Snapshot();
         camera.Switch();
     }
 
