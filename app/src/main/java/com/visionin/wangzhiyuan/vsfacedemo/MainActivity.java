@@ -2,7 +2,7 @@ package com.visionin.wangzhiyuan.vsfacedemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.ImageButton;
@@ -52,23 +52,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSurface.setOnClickListener(this);
 
+        mControl.Init(this);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        mControl.openCamera(mSurface);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mControl.openCamera();
+        mControl.closeCamera();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mControl.releaseCamera();
     }
 
     private boolean isVideoRecord = false;
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_revert:  //切换前后摄像头
                 Toast.makeText(getApplicationContext(), "切换摄像头", Toast.LENGTH_SHORT).show();
-                mControl.revertCamera();
+                mControl.switchCamera();
                 break;
             case R.id.btn_picture:  //截图
                 Toast.makeText(getApplicationContext(), "截图", Toast.LENGTH_SHORT).show();
@@ -135,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.e(TAG,index+".....");
         switch (seekBar.getId()){
             case R.id.seek_fair:  //美白
-                mControl.fairChange(index);
+                mControl.brighteningChange(index);
                 break;
             case R.id.seek_derma:  //磨皮
-                mControl.dermaChange(index);
+                mControl.smoothingChange(index);
                 break;
             case R.id.seek_tender:  //锐化
-                mControl.sharpChange(index);
+                mControl.sharpeningChange(index);
                 break;
             default:
                 break;
@@ -157,4 +159,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
+
 }
