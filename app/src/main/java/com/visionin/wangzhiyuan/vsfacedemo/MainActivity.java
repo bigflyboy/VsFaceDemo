@@ -13,7 +13,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener{
 
     private ImageButton mBtnRevert, mBtnPicture, mBtnVideo, mBtnFair, mBtnFace;
-    private ViewControl mControl;
+    private ExampleControl mControl;
     public LinearLayout mLineMain, mLineFair;
     private SeekBar mBarFair, mBarDerma, mBarTender;
     private SurfaceView mSurface;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mControl = new ViewControl();
+        mControl = new ExampleControl(this);
 
         mBtnRevert = (ImageButton) findViewById(R.id.btn_revert);
         mBtnPicture = (ImageButton) findViewById(R.id.btn_picture);
@@ -52,20 +52,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mSurface.setOnClickListener(this);
 
-        mControl.Init(this);
+        mControl.Init(mSurface);
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mControl.openCamera(mSurface);
+        mControl.Open();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mControl.closeCamera();
+        mControl.Close();
     }
 
     @Override
@@ -86,20 +86,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_revert:  //切换前后摄像头
                 Toast.makeText(getApplicationContext(), "切换摄像头", Toast.LENGTH_SHORT).show();
-                mControl.switchCamera();
+                mControl.Switch();
                 break;
             case R.id.btn_picture:  //截图
                 Toast.makeText(getApplicationContext(), "截图", Toast.LENGTH_SHORT).show();
-                mControl.capturePicture();
+                mControl.Snapshot();
                 break;
             case R.id.btn_video:  //录像
                 Toast.makeText(getApplicationContext(), "录像", Toast.LENGTH_SHORT).show();
                 if(isVideoRecord){
                     mBtnVideo.setImageResource(R.mipmap.video);
-                    mControl.stopVideo();
+                    mControl.CaptureOff();
                 }else{
                     mBtnVideo.setImageResource(R.mipmap.video_red);
-                    mControl.captureVideo();
+                    mControl.CaptureOn();
                 }
                 isVideoRecord = !isVideoRecord;
                 break;
@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getApplicationContext(), "人脸检测", Toast.LENGTH_SHORT).show();
                 if(isFace){
                     mBtnFace.setImageResource(R.mipmap.face);
-                    mControl.stopFaceDetect();
+                    mControl.FacerOff();
                 }else{
                     mBtnFace.setImageResource(R.mipmap.face_red);
-                    mControl.startFaceDetect();
+                    mControl.FacerOn();
                 }
                 isFace = !isFace;
                 break;
@@ -137,13 +137,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Log.e(TAG,index+".....");
         switch (seekBar.getId()){
             case R.id.seek_fair:  //美白
-                mControl.brighteningChange(index);
+                mControl.Brightening(index);
                 break;
             case R.id.seek_derma:  //磨皮
-                mControl.smoothingChange(index);
+                mControl.Smoothing(index);
                 break;
             case R.id.seek_tender:  //锐化
-                mControl.sharpeningChange(index);
+                mControl.Sharpening(index);
                 break;
             default:
                 break;

@@ -42,7 +42,7 @@ public class ViewControl{
             snapshot.fp.Indexing(".%d", 0);             /// snapshot.1.jpg (*.2.jpg,*.3.jpg,...)
             snapshot.Quality(.5f);
             snapshot.async = false;                     /// async=true to encode jpeg in thread
-            gpu.Snapshoter(snapshot);
+            //gpu.Snapshoter(snapshot);
         }
         if(capture == null) {
         ///	capture = new CustomizedCapturer();
@@ -53,7 +53,7 @@ public class ViewControl{
             capture.async = true;                       /// async=true to encode mp4 in thread
             capture.live = true;
             capture.Pause();
-            gpu.Capturer(capture, 480, 480);
+            //gpu.Capturer(capture, 480, 480);
         }
         camera.Open(1280, 720, 1);
     }
