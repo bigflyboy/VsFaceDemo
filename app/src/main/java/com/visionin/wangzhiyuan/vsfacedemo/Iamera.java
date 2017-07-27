@@ -4,8 +4,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.zeroo.lib.Zobject;
+import com.zeroo.lib.gpu.*;
 import com.zeroo.lib.gpu.IameraFramer;
-import com.zeroo.lib.gpu.Iraphix;
 
 /**
  * Created by Zero on 2017/2/21.
@@ -17,7 +17,7 @@ public interface Iamera {
 	/// "": 通路测试
 	/// "tuner": 美颜
 	/// "facer": 美颜+人脸检测
-	public Iraphix Mode(String mode);
+	public com.zeroo.lib.gpu.Iraphix Mode(String mode);
 
 	///////////////////////////////////////////////////////
 	/// 设置预览后才能创建上下文！

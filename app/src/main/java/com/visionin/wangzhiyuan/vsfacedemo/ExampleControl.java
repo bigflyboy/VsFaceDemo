@@ -21,6 +21,7 @@ public class ExampleControl implements IameraFramer {
 
 	protected Iapturer snapshot = null;
 	protected Iapturer capture = null;
+	protected ExampleHandler handler = null;
 
 	public ExampleControl(Activity activity) {
 		Zobject.Zactivity = activity;
@@ -36,16 +37,18 @@ public class ExampleControl implements IameraFramer {
 		camera.Preview(surface);                        /// 必须设置预览窗口
 		camera.Display(true);                           /// 开启预览
 
+		ExampleFaceshot faceshot = new ExampleFaceshot();
 		snapshot = Mreators.Snapshoter("snapshot.jpg"); /// 创建截图器
-		snapshot.Quality(.75f);                          /// 设置截图质量：0~1
+		snapshot.Quality(.75f);                         /// 设置截图质量：0~1
+		snapshot.Listener(faceshot);                    /// 设置抓脸截图处理器
 		gpu.Snapshoter();                               /// 使用截图器
 
 	///	handler = new ExampleHandler();                 /// 如需自定义的录屏处理，比如推流
 	///	capture = Mreators.Nv12Capturer(handler);       /// 自定义 NV12 帧数据处理器
 	///	capture = Mreators.H264Capturer(handler);       /// 自定义 H264 帧数据处理器（硬编码输出）
 		capture = Mreators.Capturer("capture.mp4");     /// 创建录像机
-		capture.Quality(.75f, 5);                        /// 设置录像质量：0~1 和关键帧间隔（秒数）
-		gpu.Capturer(576, 1024);                         /// 使用录像机（设置录像尺寸）
+		capture.Quality(.75f, 5);                       /// 设置录像质量：0~1 和关键帧间隔（秒数）
+		gpu.Capturer(576,1024);                         /// 使用录像机（设置录像尺寸）
 	}
 
 	public void Display(boolean enable) {
@@ -79,12 +82,15 @@ public class ExampleControl implements IameraFramer {
 	}
 
 	public void FacerOn() {
+		gpu.Parameter("facer stability", 0);            /// 设置更敏感的特征点跟踪
+	///	gpu.FaceshotOn(100);
 		gpu.FacerStart();                               /// 开始人脸检测
-		FacerChangeAR(2);
+		FacerChangeAR();
 	}
 
 	/// 停止人脸检测
 	public void FacerOff() {
+		gpu.FaceshotOff();
 		gpu.FacerStop();                                /// 停止人脸检测
 		FacerChangeAR(-1);
 	}
@@ -101,6 +107,9 @@ public class ExampleControl implements IameraFramer {
 		gpu.Parameter("sharpening", strength);          /// 改变锐化程度：0~1
 	}
 
+	public void FacerChangeAR() {
+		FacerChangeAR(2);
+	}
 	public void FacerChangeAR(float strength) {
 		int n = (int)(strength*200-100),
 			d = 1+101/((n < 0) ? 3  : objects.length),
@@ -134,10 +143,12 @@ public class ExampleControl implements IameraFramer {
 	protected int ar = 0;
 	protected ExampleRender glasses = new ExampleRender();
 	protected ExampleRender2D dog = new ExampleRender2D();
-	protected IameraFramer[] objects = {null,glasses,dog};
+	protected ExampleRender3D mask = new ExampleRender3D();
+	protected IameraFramer[] objects = {null,glasses,mask,dog};
 
 	@Override
 	public boolean FramerOpen(Iraphix gpu) {
+		gpu.Parameter("facer stability", 1);            /// 对道具渲染设置更稳定的特征点跟踪
 		objects[ar].FramerOpen(gpu);
 		///
 		int selection = camera.Active();
@@ -147,6 +158,7 @@ public class ExampleControl implements IameraFramer {
 	}
 	@Override
 	public boolean FramerClose(Iraphix gpu) {
+		gpu.Parameter("facer stability", 0);
 		camera.OnFramer(null);                          /// 取消每帧同步处理
 		gpu.RenderStop();                               /// 关闭渲染器
 		///

@@ -51,11 +51,15 @@ public interface Iraphix {
 	public void CaptureStop();
 
 	///////////////////////////////////////////////////////
-	/// 开启、关闭人脸特征点标注
+	/// 开启、关闭人脸识别，特征点标注，抓脸截图
 	public void FacerStart();
 	public void FacerStop();
 	public void FacerMarking(boolean on);
 	public void FacerMarking3D(int dots);
+	public void FaceshotOn(int timeout, int warmup);
+	public void FaceshotOn(int timeout);
+	public void FaceshotOn();
+	public void FaceshotOff();
 
 	///////////////////////////////////////////////////////
 	/// 开启、关闭纹理对象（每个纹理可服务一个或多个渲染对象）
@@ -86,6 +90,7 @@ public interface Iraphix {
 	///////////////////////////////////////////////////////
 	/// 设置渲染对象的锚点，比如："face/0/105“ 代表第0 张人脸第105 号特征点（鼻根）
 	public void ObjectAnchor(String id, String anchor);
+	public void ObjectAnchor(String id, String anchor, int n);
 	///////////////////////////////////////////////////////
 	/// 动态修改渲染对象纹理取景框
 	public void ObjectWindow(String id, float x, float y, float width, float height);
@@ -99,6 +104,10 @@ public interface Iraphix {
 	public void ObjectOffset(String id, float ox, float oy);
 	public void ObjectScalar(String id, float sx, float sy, float sz);
 	public void ObjectScalar(String id, float s);
+	///////////////////////////////////////////////////////
+	/// 设置渲染对象反光参数（材质特性）：反光率，环境光强，高光强度
+	public void ObjectReflect(String id, float reflect, float ambient, float specular);
+	public void ObjectNormal(String id, String anchor);
 
 	///////////////////////////////////////////////////////
 	/// 开启、关闭渲染所有对象

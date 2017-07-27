@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void run() {
                 try {
 
-                    if (!FileUtils.isFileExists(DATA_PATH + "/dog_ear/ear.1.png")){
+                    if (!FileUtils.isFileExists(DATA_PATH + "/mask/mask.png")){
                         copyFilesFassets(MainActivity.this, "picture", DATA_PATH);
                     }else{
                         Thread.sleep(500);

@@ -19,7 +19,10 @@ public class ExampleRender implements IameraFramer {
 		gpu.OpenTexture("#0");                          /// #0 号纹理（外部推送）
 		gpu.OpenObject(".0", "#0", 999);                /// .0 号渲染对象绑定#0 号纹理序列，循环 N 次后自动结束
 		gpu.ObjectSize(".0", w, h, s);                  /// .0 号渲染对象的纹理尺度以及“单位尺度”
-		gpu.ObjectAnchor(".0", "face/0/105");           /// .0 号渲染对象的锚点：0 号脸第 105 号点：鼻根
+	///	gpu.ObjectAnchor(".0", "face/0/105");           /// .0 号渲染对象的锚点：0 号脸第 105 号点：鼻根
+		gpu.ObjectAnchor(".0", "face/0/105", 9);        /// .0 号渲染对象的锚点：0 号脸第 105 号点：鼻根（第一排点）
+		gpu.ObjectAnchor(".0", "face/0/102", 9);        /// .0 号渲染对象的锚点：0 号脸第 102 号点：鼻尖（第二排点）
+		gpu.ObjectAnchor(".0", "face/0/101");           /// .0 号渲染对象的锚点：0 号脸第 101 号点：鼻底（其余）
 		return true;
 	}
 	@Override
